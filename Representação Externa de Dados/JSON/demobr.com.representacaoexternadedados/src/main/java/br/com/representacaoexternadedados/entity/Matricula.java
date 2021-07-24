@@ -24,7 +24,6 @@ public class Matricula {
     @Column(name = "ano")
     private int ano;
 
-
     @Column(name = "semestre")
     private int semestre;
 

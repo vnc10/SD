@@ -1,11 +1,14 @@
 package br.com.representacaoexternadedados.controller;
 
 import br.com.representacaoexternadedados.dto.MatriculaDTO;
+import br.com.representacaoexternadedados.entity.Disciplina;
 import br.com.representacaoexternadedados.entity.Matricula;
 import br.com.representacaoexternadedados.service.MatriculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("sd/")
@@ -19,4 +22,15 @@ public class MatriculaController {
         return ResponseEntity.ok().body(matriculaService.createMatricula(matriculaDTO));
     }
 
+    @GetMapping("matricula")
+    public ResponseEntity<?> findAlunos(@RequestBody MatriculaDTO matriculaDTO){
+            return ResponseEntity.ok().body(matriculaService.findAluno(matriculaDTO));
+
+    }
+
+    @PutMapping("matricula/{id}")
+    public ResponseEntity<?> updateNota(@PathVariable Long id,
+                                        @RequestBody MatriculaDTO matriculaDTO){
+        return ResponseEntity.ok().body(matriculaService.updateNota(id, matriculaDTO));
+    }
 }

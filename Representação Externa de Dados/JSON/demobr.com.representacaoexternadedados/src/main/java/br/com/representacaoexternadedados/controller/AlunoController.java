@@ -1,7 +1,7 @@
 package br.com.representacaoexternadedados.controller;
 
 import br.com.representacaoexternadedados.dto.AlunoDTO;
-import br.com.representacaoexternadedados.service.AlunoService;
+import br.com.representacaoexternadedados.service.AlunoServiceImplem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlunoController {
 
     @Autowired
-    private AlunoService alunoService;
+    private AlunoServiceImplem alunoServiceImplem;
 
     @PostMapping("aluno")
     public ResponseEntity<?> createAluno(@RequestBody AlunoDTO alunoDTO) {
-        return ResponseEntity.ok().body(alunoService.createAluno(alunoDTO));
+        return ResponseEntity.ok().body(alunoServiceImplem.createAluno(alunoDTO));
     }
 }
