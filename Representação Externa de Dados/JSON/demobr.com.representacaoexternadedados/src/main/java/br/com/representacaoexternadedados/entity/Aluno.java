@@ -1,5 +1,6 @@
 package br.com.representacaoexternadedados.entity;
 
+import br.com.representacaoexternadedados.dto.AlunoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +30,10 @@ public class Aluno {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "codigo_curso")
     private Curso curso;
+
+    public Aluno(AlunoDTO alunoDTO) {
+        this.nome = alunoDTO.getNome();
+        this.periodo = alunoDTO.getPeriodo();
+        this.curso = alunoDTO.getCurso();
+    }
 }

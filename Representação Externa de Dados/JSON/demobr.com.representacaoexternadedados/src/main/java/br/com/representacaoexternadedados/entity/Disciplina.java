@@ -1,5 +1,6 @@
 package br.com.representacaoexternadedados.entity;
 
+import br.com.representacaoexternadedados.dto.DisciplinaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,4 +32,9 @@ public class Disciplina {
     private Curso curso;
 
 
+    public Disciplina(DisciplinaDTO disciplinaDTO) {
+        this.nome = disciplinaDTO.getNome();
+        this.professor = disciplinaDTO.getProfessor();
+        this.curso = disciplinaDTO.getCurso();
+    }
 }

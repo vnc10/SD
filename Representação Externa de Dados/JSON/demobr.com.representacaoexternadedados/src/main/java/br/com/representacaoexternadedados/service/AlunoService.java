@@ -15,6 +15,8 @@ public class AlunoService {
     }
 
     public Aluno createAluno(AlunoDTO alunoDTO){
-        return null;
+        Aluno aluno = new Aluno(alunoDTO);
+        alunoRepository.save(aluno);
+        return aluno;
     }
 }

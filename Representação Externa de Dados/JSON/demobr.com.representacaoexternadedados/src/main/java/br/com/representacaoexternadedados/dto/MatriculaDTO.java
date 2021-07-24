@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MatriculaDTO {
 
+    private int ano;
     private int semestre;
     private float nota;
     private int faltas;

@@ -30,7 +30,5 @@ public class Curso implements Serializable {
         this.nome = cursoDTO.getNome();
     }
 
-//    @OneToMany(mappedBy = "curso", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Aluno> alunos;
 
 }
