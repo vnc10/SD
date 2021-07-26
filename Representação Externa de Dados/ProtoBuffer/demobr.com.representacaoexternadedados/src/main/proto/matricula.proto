@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "br.com.representacaoexternadedados.proto";
+option java_outer_classname = "MatriculaProto";
+
+message Matricula {
+
+    uint32 ra_aluno = 1;
+    uint32 ano = 2;
+    uint32 semestre = 3;
+    double nota = 4;
+    uint32 faltas = 5;
+}
+
