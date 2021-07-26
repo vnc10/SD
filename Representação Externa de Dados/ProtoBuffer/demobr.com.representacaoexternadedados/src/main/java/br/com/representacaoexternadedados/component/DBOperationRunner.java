@@ -1,7 +1,7 @@
 package br.com.representacaoexternadedados.component;
 
-import br.com.representacaoexternadedados.dto.MatriculaDTO;
 import br.com.representacaoexternadedados.entity.Matricula;
+import br.com.representacaoexternadedados.proto.ConsultaProto;
 import br.com.representacaoexternadedados.proto.MatriculaProto;
 import br.com.representacaoexternadedados.repository.AlunoRepository;
 import br.com.representacaoexternadedados.repository.CursoRepository;
@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -59,16 +62,14 @@ public class DBOperationRunner implements CommandLineRunner {
             byte[] buffer = new byte[sizeBuffer];
             inClient.read(buffer);
             MatriculaProto.Matricula m = MatriculaProto.Matricula.parseFrom(buffer);
-
-            long id = 1;
-            if(getMatriculaById(id) != null){
-                salvaMatricula(getMatriculaById(id), m);
+            ConsultaProto.Consulta c = ConsultaProto.Consulta.parseFrom(buffer);
+            if (m.getOp() == 1) {
+                if (getMatriculaById(m.getRaAluno()) != null) {
+                    salvaMatricula(Objects.requireNonNull(getMatriculaById(m.getRaAluno())), m);
+                }
+            } else {
+                System.out.println(findAluno(c.getAno()));
             }
-            System.out.println("--" + m.getRaAluno() + "--\n");
-            System.out.println("--" + m.getAno() + "--\n");
-            System.out.println("--" + m.getSemestre() + "--\n");
-            System.out.println("--" + m.getNota() + "--\n");
-            System.out.println("--" + m.getFaltas() + "--\n");
 
             //} //while
 
@@ -82,13 +83,26 @@ public class DBOperationRunner implements CommandLineRunner {
     }
 
     private Matricula getMatriculaById(long id) {
-            Optional<Matricula> matricula = matriculaRepository.findById(id);
-            if (matricula.isPresent()) {
-                return matricula.get();
-            } else {
-                System.out.print("ID de matricula invalido");
-                return null;
+        Optional<Matricula> matricula = matriculaRepository.findByAluno_Ra(id);
+        if (matricula.isPresent()) {
+            return matricula.get();
+        } else {
+            System.out.print("ID de matricula invalido");
+            return null;
         }
+    }
+
+    private List<Matricula> getMatriculaAno(int ano) {
+        return matriculaRepository.findByAno(ano);
+    }
+
+    public List<String> findAluno(int ano) {
+        List<Matricula> matricula = getMatriculaAno(ano);
+        List<String> nomes = new ArrayList();
+        for (Matricula value : matricula) {
+            nomes.add(value.getAluno().getNome());
+        }
+        return nomes;
     }
 
 }

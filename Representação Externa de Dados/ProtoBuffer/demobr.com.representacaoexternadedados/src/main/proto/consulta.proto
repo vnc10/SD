@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "br.com.representacaoexternadedados.proto";
+option java_outer_classname = "ConsultaProto";
+
+message Consulta {
+
+    uint32 ano = 1;
+    uint64 codigo_disciplina = 2;
+    uint32 op = 3;
+}
+

@@ -12,5 +12,6 @@ message Matricula {
     uint32 semestre = 3;
     double nota = 4;
     uint32 faltas = 5;
+    uint32 op = 6;
 }
 
