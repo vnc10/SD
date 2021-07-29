@@ -40,7 +40,7 @@ public class ProtocolController {
 
     private void sendMessageGroup(Message msg) throws IOException {
         try {
-            byte[] m = this.criptografa(msg.getBytes());
+            byte[] m = msg.getBytes();
             DatagramPacket messageOut = new DatagramPacket(m, m.length, this.group, 6789);
 
             this.multicastSocket.send(messageOut);
@@ -53,7 +53,7 @@ public class ProtocolController {
 
     private void sendMessage(Message msg, InetAddress target) throws IOException {
         try {
-            byte[] m = this.criptografa(msg.getBytes());
+            byte[] m = msg.getBytes();
             DatagramPacket request = new DatagramPacket(m, m.length, target, 6799);
             this.udpSocket.send(request);
         } catch (SocketException e) {
@@ -94,7 +94,7 @@ public class ProtocolController {
 
         multicastSocket.receive(messageIn);
 
-        Message msg = new Message(this.criptografa(messageIn.getData()));
+        Message msg = new Message(messageIn.getData());
 
         if (!msg.getSource().equals(this.nick)) {
             if (msg.getType() == 1) {
@@ -115,24 +115,12 @@ public class ProtocolController {
 
         udpSocket.receive(messageIn);
 
-        Message msg = new Message(this.criptografa(messageIn.getData()));
+        Message msg = new Message(messageIn.getData());
 
         if (msg.getType() == 2) {
             this.onlineUsers.put(msg.getSource(), messageIn.getAddress());
         }
 
         this.ui.update(msg);
-    }
-
-    private byte[] criptografa(byte[] message) {
-        for (int i = 0; i < message.length; i += 2) {
-            if (i < message.length - 1) {
-                byte aux = message[i];
-                message[i] = message[i + 1];
-                message[i + 1] = aux;
-            }
-        }
-
-        return message;
     }
 }
