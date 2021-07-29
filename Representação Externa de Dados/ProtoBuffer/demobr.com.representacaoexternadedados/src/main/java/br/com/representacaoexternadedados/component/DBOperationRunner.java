@@ -13,8 +13,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -42,40 +43,47 @@ public class DBOperationRunner implements CommandLineRunner {
             int serverPort = 7000; // porta do servidor
             ServerSocket listenSocket = new ServerSocket(serverPort);
 
-            //while (true) {
-            System.out.println("Servidor aguardando conexão ...");
+            while (true) {
+                System.out.println("Servidor aguardando conexão ...");
 
-            /* aguarda conexões */
-            Socket clientSocket = listenSocket.accept();
+                /* aguarda conexões */
+                Socket clientSocket = listenSocket.accept();
 
-            System.out.println("Cliente conectado ...");
+                System.out.println("Cliente conectado ...");
 
-            /* recebe os dados enviados pelo cliente*/
-            DataInputStream inClient = new DataInputStream(clientSocket.getInputStream());
-            InputStreamReader i;
+                /* recebe os dados enviados pelo cliente*/
+                DataInputStream inClient = new DataInputStream(clientSocket.getInputStream());
 
-            String valueStr = inClient.readLine();
-            //System.out.println("Valor lido:" + valueStr);
+                String valueStr = inClient.readLine();
+                //System.out.println("Valor lido:" + valueStr);
 
-            int sizeBuffer = Integer.parseInt(valueStr);
+                int sizeBuffer = Integer.parseInt(valueStr);
 
-            byte[] buffer = new byte[sizeBuffer];
-            inClient.read(buffer);
-            MatriculaProto.Matricula m = MatriculaProto.Matricula.parseFrom(buffer);
-            ConsultaProto.Consulta c = ConsultaProto.Consulta.parseFrom(buffer);
-            if (m.getOp() == 1) {
-                if (getMatriculaById(m.getRaAluno()) != null) {
-                    salvaMatricula(Objects.requireNonNull(getMatriculaById(m.getRaAluno())), m);
+                byte[] buffer = new byte[sizeBuffer];
+                inClient.read(buffer);
+                MatriculaProto.Matricula m = MatriculaProto.Matricula.parseFrom(buffer);
+                ConsultaProto.Consulta c = ConsultaProto.Consulta.parseFrom(buffer);
+                DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+                if (m.getOp() == 1) {
+                    if (getMatriculaById(m.getRaAluno()) != null) {
+                        salvaMatricula(Objects.requireNonNull(getMatriculaById(m.getRaAluno())), m);
+                        dataOutputStream.writeUTF("Atualizado com sucesso!");
+                    }
+                } else {
+                    List<String> message = findAluno(c.getAno());
+                    System.out.println(message);
+                    dataOutputStream.writeUTF(String.valueOf(message));
                 }
-            } else {
-                System.out.println(findAluno(c.getAno()));
+
             }
 
-            //} //while
 
+        } catch (EOFException e){
+            System.out.println("EOF: " + e.getMessage());
         } catch (IOException e) {
             System.out.println("Listen socket:" + e.getMessage());
         }
+
     }
 
     private void salvaMatricula(Matricula matriculaById, MatriculaProto.Matricula m) {
