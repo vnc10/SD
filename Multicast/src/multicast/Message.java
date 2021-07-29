@@ -1,4 +1,4 @@
-package teste;
+package multicast;
 
 public class Message {
     private final byte type;

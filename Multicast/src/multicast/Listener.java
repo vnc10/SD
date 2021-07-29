@@ -1,4 +1,4 @@
-package teste;
+package multicast;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package teste;
+package multicast;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;

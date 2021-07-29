@@ -1,4 +1,4 @@
-package teste;
+package multicast;
 
 import java.io.IOException;
 import java.net.*;
@@ -32,20 +32,20 @@ public class ProtocolController {
 
     public void send(String targetUser, String msg) throws IOException {
         if (targetUser.equals("Todos")) {
-            Message messageSent = new Message((byte) 3, this.nick, msg);
-            this.sendMessageGroup(messageSent);
+            Message message = new Message((byte) 3, this.nick, msg);
+            this.sendMessageGroup(message);
         } else {
-            Message messageSent = new Message((byte) 4, this.nick, msg);
-            this.sendMessage(messageSent, onlineUsers.get(targetUser));
+            Message message = new Message((byte) 4, this.nick, msg);
+            this.sendMessage(message, onlineUsers.get(targetUser));
         }
     }
 
     private void sendMessageGroup(Message msg) throws IOException {
         try {
-            byte[] m = msg.getBytes();
-            DatagramPacket messageOut = new DatagramPacket(m, m.length, this.group, 6789);
+            byte[] data = msg.getBytes();
+            DatagramPacket datagramPacket = new DatagramPacket(data, data.length, this.group, 6789);
 
-            this.multicastSocket.send(messageOut);
+            this.multicastSocket.send(datagramPacket);
         } catch (SocketException e) {
             System.out.println("Socket: " + e.getMessage());
         } catch (IOException e) {
@@ -55,9 +55,9 @@ public class ProtocolController {
 
     private void sendMessage(Message msg, InetAddress target) throws IOException {
         try {
-            byte[] m = msg.getBytes();
-            DatagramPacket request = new DatagramPacket(m, m.length, target, 6799);
-            this.udpSocket.send(request);
+            byte[] data = msg.getBytes();
+            DatagramPacket datagramPacket = new DatagramPacket(data, data.length, target, 6799);
+            this.udpSocket.send(datagramPacket);
         } catch (SocketException e) {
             System.out.println("Socket: " + e.getMessage());
         } catch (IOException e) {
@@ -66,14 +66,14 @@ public class ProtocolController {
     }
 
     public void join() throws IOException {
-        Message messageInitial = new Message((byte) 1, this.nick, "");
-        this.sendMessageGroup(messageInitial);
+        Message message = new Message((byte) 1, this.nick, "");
+        this.sendMessageGroup(message);
     }
 
     public void leave() throws IOException {
         try {
-            Message msg = new Message((byte) 5, this.nick, "");
-            this.sendMessageGroup(msg);
+            Message message = new Message((byte) 5, this.nick, "");
+            this.sendMessageGroup(message);
 
             this.multicastSocket.leaveGroup(this.group);
         } catch (SocketException e) {
@@ -92,37 +92,37 @@ public class ProtocolController {
 
     public void receiveMulticastPacket() throws IOException {
         byte[] buffer = new byte[1000];
-        DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+        DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
 
-        multicastSocket.receive(messageIn);
+        multicastSocket.receive(datagramPacket);
 
-        Message msg = new Message(messageIn.getData());
+        Message message = new Message(datagramPacket.getData());
 
-        if (!msg.getSource().equals(this.nick)) {
-            if (msg.getType() == 1) {
-                this.onlineUsers.put(msg.getSource(), messageIn.getAddress());
+        if (!message.getSource().equals(this.nick)) {
+            if (message.getType() == 1) {
+                this.onlineUsers.put(message.getSource(), datagramPacket.getAddress());
 
                 Message msgJoinACK = new Message((byte) 2, this.nick, "");
-                this.sendMessage(msgJoinACK, messageIn.getAddress());
-            } else if (msg.getType() == 5) {
-                this.onlineUsers.remove(msg.getSource());
+                this.sendMessage(msgJoinACK, datagramPacket.getAddress());
+            } else if (message.getType() == 5) {
+                this.onlineUsers.remove(message.getSource());
             }
-            this.ui.update(msg);
+            this.ui.update(message);
         }
     }
 
     public void receiveUdpPacket() throws IOException {
-        byte[] buffer = new byte[1000];
-        DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+        byte[] data = new byte[1000];
+        DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
 
-        udpSocket.receive(messageIn);
+        udpSocket.receive(datagramPacket);
 
-        Message msg = new Message(messageIn.getData());
+        Message message = new Message(datagramPacket.getData());
 
-        if (msg.getType() == 2) {
-            this.onlineUsers.put(msg.getSource(), messageIn.getAddress());
+        if (message.getType() == 2) {
+            this.onlineUsers.put(message.getSource(), datagramPacket.getAddress());
         }
 
-        this.ui.update(msg);
+        this.ui.update(message);
     }
 }
