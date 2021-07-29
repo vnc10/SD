@@ -1,3 +1,5 @@
+package teste;
+
 public class Message {
     private final byte type;
     private final String source;

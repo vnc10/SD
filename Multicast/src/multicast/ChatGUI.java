@@ -1,3 +1,5 @@
+package teste;
+
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -211,8 +213,7 @@ public class ChatGUI extends javax.swing.JFrame implements UIControl {
 
             protoController = new ProtocolController(prop);
             listener = new Listener(protoController);
-            listener.run();
-
+            listener.start();
             protoController.join();
 
         } catch (UnknownHostException uhe) {

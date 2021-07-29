@@ -1,3 +1,5 @@
+package teste;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
@@ -64,7 +66,7 @@ public class ProtocolController {
     }
 
     public void join() throws IOException {
-        Message messageInitial = new Message((byte) 1, this.nick, " ");
+        Message messageInitial = new Message((byte) 1, this.nick, "");
         this.sendMessageGroup(messageInitial);
     }
 
