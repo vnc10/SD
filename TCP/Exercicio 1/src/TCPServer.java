@@ -60,7 +60,7 @@ class ClientThread extends Thread {
                     server.returnTimeOrDate(1, dataOutputStream);
 
                 } else if (buffer.equals("DATE")) {
-                    server.returnTimeOrDate(2, dataOutputStream);
+                        server.returnTimeOrDate(2, dataOutputStream);
 
                 } else if (buffer.equals("FILES")) {
                     server.files(dataOutputStream);
