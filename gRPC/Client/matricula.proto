@@ -1,11 +1,54 @@
 syntax = "proto3";
 
-message Matricula {
+package proto;
 
-    uint32 ra_aluno = 1;
-    uint32 ano = 2;
-    uint32 semestre = 3;
-    double nota = 4;
-    uint32 faltas = 5;
-    uint32 op = 6;
+service MatriculaService {
+  rpc cadastraNota(Matricula) returns (Mess) {}
+
+  rpc atualizaNota(Matricula) returns (Mess) {}
+
+  rpc removeNota(Matricula) returns (Mess) {}
+
+  rpc consultaNota(Matricula) returns (Mess) {}
+
+  rpc consultaFalta(Matricula) returns (Mess) {}
+
+  rpc consultaAluno(Matricula) returns (Mess) {}
+}
+
+message Mess {
+  string mess = 1;
+}
+
+message MessInt {
+  int32 mess = 1;
+}
+
+message Curso {
+  int32 codigo = 1;
+  string nome = 2;
+}
+
+message Aluno {
+  int32 ra = 1;
+  string nome = 2;
+  int32 periodo = 3;
+  int32 codigo_curso = 4;
+}
+
+message Disciplina {
+  string codigo = 1;
+  string nome = 2;
+  string professor = 3;
+  int32 codigo_curso = 4;
+}
+
+message Matricula {
+  int32 id = 1;
+  int32 ra_aluno = 2;
+  int64 codigo_disciplina = 3;
+  int32 ano = 4;
+  int32 semestre = 5;
+  float nota = 6;
+  int32 faltas = 7;
 }

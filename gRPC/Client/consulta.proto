@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-message Consulta {
-
-    uint32 ano = 1;
-    uint64 codigo_disciplina = 2;
-    uint32 op = 3;
-}

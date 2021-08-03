@@ -34,7 +34,7 @@ public class DBOperationRunner implements CommandLineRunner {
     public void run(String... args) throws IOException, InterruptedException {
         Server server = ServerBuilder
                 .forPort(7777)
-                .addService(new MatriculaServiceImpl(matriculaRepository))
+                .addService(new MatriculaServiceImpl(matriculaRepository, disciplinaRepository, alunoRepository))
                 .build();
 
         try {
