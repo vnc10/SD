@@ -55,13 +55,6 @@ public class MatriculaServiceImpl extends MatriculaServiceGrpc.MatriculaServiceI
     @Override
     public void cadastraNota(MatriculaProto.Matricula request, StreamObserver<MatriculaProto.Mess> responseObserver) {
         System.out.println("Request received from client:\n" + request);
-        String matricula = "ID: " + request.getId() +
-                " RA: " + request.getRaAluno() +
-                " Codigo Disciplina: " + request.getCodigoDisciplina() +
-                " Ano: " + request.getAno() +
-                " Semestre: " + request.getSemestre() +
-                " Nota: " + request.getNota() +
-                " Faltas: " + request.getFaltas();
         Matricula m = getMatriculaById(request.getId());
         String str = null;
         if(m != null){
@@ -86,13 +79,6 @@ public class MatriculaServiceImpl extends MatriculaServiceGrpc.MatriculaServiceI
     @Override
     public void consultaNota(MatriculaProto.Matricula request, StreamObserver<MatriculaProto.Mess> responseObserver) {
         System.out.println("Request received from client:\n" + request);
-        String matricula = "ID: " + request.getId() +
-                " RA: " + request.getRaAluno() +
-                " Codigo Disciplina: " + request.getCodigoDisciplina() +
-                " Ano: " + request.getAno() +
-                " Semestre: " + request.getSemestre() +
-                " Nota: " + request.getNota() +
-                " Faltas: " + request.getFaltas();
         Matricula m = consultaNota(request.getId());
         String str = null;
         if (m == null){
@@ -112,13 +98,6 @@ public class MatriculaServiceImpl extends MatriculaServiceGrpc.MatriculaServiceI
     @Override
     public void atualizaNota(MatriculaProto.Matricula request, StreamObserver<MatriculaProto.Mess> responseObserver) {
         System.out.println("Request received from client:\n" + request);
-        String matricula = "ID: " + request.getId() +
-                " RA: " + request.getRaAluno() +
-                " Codigo Disciplina: " + request.getCodigoDisciplina() +
-                " Ano: " + request.getAno() +
-                " Semestre: " + request.getSemestre() +
-                " Nota: " + request.getNota() +
-                " Faltas: " + request.getFaltas();
         Matricula m = consultaNota(request.getId());
         String str = null;
         if (m == null){
@@ -143,13 +122,6 @@ public class MatriculaServiceImpl extends MatriculaServiceGrpc.MatriculaServiceI
     @Override
     public void removeNota(MatriculaProto.Matricula request, StreamObserver<MatriculaProto.Mess> responseObserver) {
         System.out.println("Request received from client:\n" + request);
-        String matricula = "ID: " + request.getId() +
-                " RA: " + request.getRaAluno() +
-                " Codigo Disciplina: " + request.getCodigoDisciplina() +
-                " Ano: " + request.getAno() +
-                " Semestre: " + request.getSemestre() +
-                " Nota: " + request.getNota() +
-                " Faltas: " + request.getFaltas();
         Matricula m = consultaNota(request.getId());
         String str = null;
         if (m == null){
@@ -174,13 +146,6 @@ public class MatriculaServiceImpl extends MatriculaServiceGrpc.MatriculaServiceI
     @Override
     public void consultaFalta(MatriculaProto.Matricula request, StreamObserver<MatriculaProto.Mess> responseObserver) {
         System.out.println("Request received from client:\n" + request);
-        String matricula = "ID: " + request.getId() +
-                " RA: " + request.getRaAluno() +
-                " Codigo Disciplina: " + request.getCodigoDisciplina() +
-                " Ano: " + request.getAno() +
-                " Semestre: " + request.getSemestre() +
-                " Nota: " + request.getNota() +
-                " Faltas: " + request.getFaltas();
         List<Matricula> m = consultaNotaeFaltas(request.getCodigoDisciplina(), request.getAno());
         String str = null;
         if(m == null){
@@ -188,8 +153,8 @@ public class MatriculaServiceImpl extends MatriculaServiceGrpc.MatriculaServiceI
         }
         else {
             List<String> result = new ArrayList<>();
-            for(int i = 0; i < m.size(); i++){
-                result.add("Disciplina: "+ m.get(i).getDisciplina().getNome() + " Nota: " + m.get(i).getNota() + " Faltas: " + m.get(i).getFaltas() + "\n");
+            for (Matricula matricula : m) {
+                result.add("Disciplina: " + matricula.getDisciplina().getNome() + " Nota: " + matricula.getNota() + " Faltas: " + matricula.getFaltas() + "\n");
             }
             str = String.join(",", result);
         }
