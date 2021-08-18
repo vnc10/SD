@@ -22,9 +22,9 @@ public class MatriculaController {
         return ResponseEntity.ok().body(matriculaService.createMatricula(matriculaDTO));
     }
 
-    @GetMapping("matricula")
-    public ResponseEntity<?> findAlunos(@RequestBody MatriculaDTO matriculaDTO){
-            return ResponseEntity.ok().body(matriculaService.findAluno(matriculaDTO));
+    @GetMapping("matricula/{ano}")
+    public ResponseEntity<?> findAlunos(@PathVariable int ano){
+            return ResponseEntity.ok().body(matriculaService.findAluno(ano));
 
     }
 

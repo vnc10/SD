@@ -54,8 +54,8 @@ public class MatriculaService {
         return matricula;
     }
 
-    public List<String> findAluno(MatriculaDTO matriculaDTO) {
-        List<Matricula> matricula = getMatriculaAno(matriculaDTO.getAno());
+    public List<String> findAluno(int ano) {
+        List<Matricula> matricula = getMatriculaAno(ano);
         List<String> nomes = new ArrayList();
         for (Matricula value : matricula) {
             nomes.add(value.getAluno().getNome());
